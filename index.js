@@ -1,0 +1,95 @@
+const form = document.querySelector("#todo-form");
+const title = document.querySelector("#todo-title");
+const category = document.querySelector("#todo-category");
+const list = document.querySelector("#todo-list");
+const filter = document.querySelector("#todo-filter");
+const count = document.querySelector("#todo-count");
+
+const render = (items, itemsCount) => {
+    count.textContent = `(${itemsCount})`;
+    list.innerHTML = items.map(todo => `<li>${todo.title} [${todo.category}]</li>`).join("");
+}
+
+class Todos {
+    // Do NOT modify the constructor
+    constructor() {
+        // we don't capture any parameters here
+        // we're defining an array of todos with two example todos
+        this.todos = [{
+            title: "Learn JavaScript",
+            category: "work"
+        }, {
+            title: "Meditate",
+            category: "personal"
+        }];
+    }
+
+    // TODO: define remaining instance methods
+    getAll(){
+        return this.todos;
+    }
+
+    getCount(){
+        return this.todos.length
+    }
+
+    add(title , category){
+        const naya = {title :title , category : category};
+        this.todos.push(naya);
+    }
+
+    getWork(){
+        const onlykaam = this.todos.filter(x => x.category === "work");
+        return onlykaam;
+    }
+
+    getWorkCount(){
+        return this.getWork().length;
+    }
+
+    getPersonal(){
+        const onlymaza = this.todos.filter(x => x.category === "personal");
+        return onlymaza;
+    }
+
+    getPersonalCount(){
+        return this.getPersonal().length;
+    }
+    
+}
+
+const todos = new Todos();
+
+try {
+    render(todos.getAll(), todos.getCount());
+} catch (error) {
+    console.error(error);
+}
+
+form.addEventListener("submit", event => {
+    event.preventDefault();
+    try {
+        todos.add(title.value, category.value);
+        render(todos.getAll(), todos.getCount());
+    } catch (error) {
+        console.error(error);
+    }
+    title.value = "";
+});
+
+filter.addEventListener("change", () => {
+    try {
+        if (filter.value === "work") {
+            // filter work
+            render(todos.getWork(), todos.getWorkCount());
+        } else if (filter.value === "personal") {
+            // filter personal
+            render(todos.getPersonal(), todos.getPersonalCount());
+        } else {
+            // show all
+            render(todos.getAll(), todos.getCount());
+        }
+    } catch (error) {
+        console.error(error);
+    }
+});
